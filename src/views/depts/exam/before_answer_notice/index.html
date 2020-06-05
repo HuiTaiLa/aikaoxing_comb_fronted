@@ -1,0 +1,724 @@
+<html>
+  <head>
+  <meta charset="utf-8">
+  <title>考试系统</title>
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="shortcut icon" href="/static/images/logo.jpg">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="renderer" content="webkit">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="stylesheet" type="text/css" href="https://s1.kaoshixing.com/static/plugins/bootstrap/css/bootstrap.min.css?v=9ed71d952357">
+  <link rel="stylesheet" type="text/css" href="https://s1.kaoshixing.com/static/plugins/IconFont/css/styles.min.css?v=155b8a0f0957">
+  <link rel="stylesheet" type="text/css" href="https://s4.kaoshixing.com/static/plugins/examFont/style.css?v=5c580b66db57">
+
+  <link rel="stylesheet" type="text/css" href="https://s4.kaoshixing.com/static/base/css/base.css?v=af1f18f7bb57">
+  <link rel="stylesheet" type="text/css" href="https://s0.kaoshixing.com/static/base/css/response.css?v=1e66103c3257">
+  <link rel="stylesheet" type="text/css" href="https://s1.kaoshixing.com/static/exam/css/exam_before_notice.css?v=cf9e9bb7f5">
+
+
+  <style>
+
+    .content ul{
+      list-style: disc;
+      padding-left:20px
+    }
+    /*排行榜优化*/
+    .examinee-rank-list{
+      margin:0;
+      padding:8px 10px;
+    }
+    .examinee-label{
+      margin:0;
+      border-radius: 6px;
+    }
+    .user_rank{
+      background: rgba(26,140,254,0.10);
+    }
+    .user_rank .user-rank-icon{
+      line-height: 20px;
+      font-size: 12px;
+      color: #FFFFFF;
+      background: #1A8CFE;
+      border-radius: 20px;
+      text-align: center;
+      width: 20px;
+      height: 20px;
+      display:inline-block;
+      margin-right: 12px;
+      position: relative;
+      left: 2px;
+    }
+  </style>
+  <link rel="stylesheet" type="text/css" href="https://s0.kaoshixing.com/static/base/css/m_hidden_config.css?v=5dbbc1d43c2">
+  <style type="text/css">/* Copyright 2014-present Evernote Corporation. All rights reserved. */
+  @keyframes caretBlink {
+    from { opacity: 1.0; }
+    to { opacity: 0.0; }
+  }
+
+  @keyframes rotateSpinner {
+    from {
+      transform:rotate(0deg);
+    }
+    to {
+      transform:rotate(360deg);
+    }
+  }
+
+  #text-tool-caret {
+    animation-name: caretBlink;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(1.0,0,0,1.0);
+    animation-duration: 1s;
+  }
+
+  #en-markup-loading-spinner {
+    position: absolute;
+    top: calc(50% - 16px);
+    left: calc(50% - 16px);
+    width: 32px;
+    height: 32px;
+  }
+
+  #en-markup-loading-spinner img {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    animation-name: rotateSpinner;
+    animation-duration: 0.6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+  </style><style type="text/css">/* Copyright 2014-present Evernote Corporation. All rights reserved. */
+.skitchToastBoxContainer {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 30px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  pointer-events: none;
+}
+
+.skitchToastBox {
+  width: 200px;
+  height: 16px;
+  padding: 12px;
+  background-color: rgba(47, 55, 61, 0.95);
+  border-radius: 4px;
+  color: white;
+  cursor: default;
+  font-size: 10pt;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.32);
+  font-family: 'Soleil', Helvetica, Arial, sans-serif;
+  border: 2px rgba(255, 255, 255, 0.38) solid;
+}
+
+.lang-zh-cn .skitchToastBox {
+  font-family: '微软雅黑', 'Microsoft YaHei', SimSun,
+  '&#x30E1;&#x30A4;&#x30EA;&#x30AA;', Meiryo, 'MS PGothic', 'Soleil',
+  Helvetica, Arial, sans-serif;
+}
+
+.lang-ja-jp .skitchToastBox {
+  font-family: '&#x30E1;&#x30A4;&#x30EA;&#x30AA;', Meiryo, 'MS PGothic',
+  '微软雅黑', 'Microsoft YaHei', SimSun, 'Soleil', Helvetica, Arial,
+  sans-serif;
+}
+
+.skitchToast {
+  padding-left: 20px;
+  padding-right: 20px;
+  display: inline-block;
+  height: 10px;
+  color: #f1f5f8;
+  text-align: center;
+}
+
+.skitchVisible {
+  /* Don't remove this class it's a hack used by the Evernote Clipper */
+}
+</style><style type="text/css">/* Copyright 2014-present Evernote Corporation. All rights reserved. */
+
+@font-face {
+  font-family: 'Soleil';
+  font-weight: normal;
+  font-style: normal;
+}
+</style><style type="text/css">/* Copyright 2019-present Evernote Corporation. All rights reserved. */
+
+#en-markup-disabled {
+  position: fixed;
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  cursor: default;
+  -webkit-user-select: none;
+}
+
+#en-markup-alert-container {
+  position: absolute;
+  z-index: 9999;
+  width: 450px;
+  left: calc(50% - 225px);
+  top: calc(50% - 85px);
+  background-color: white;
+  box-shadow: 0 2px 7px 1px rgba(0,0,0,0.35);
+  -webkit-user-select: none;
+}
+
+#en-markup-alert-container .cell-1 {
+  position: relative;
+  height: 110px;
+  width: 105px;
+  float: left;
+  text-align: center;
+  background-position: 65% 50%;
+  background-repeat: no-repeat;
+}
+
+#en-markup-alert-container .cell-2 {
+  position: relative;
+  float: left;
+  width: 345px;
+  margin-top: 29px;
+  margin-bottom: 20px;
+}
+
+#en-markup-alert-container .cell-2 .cell-2-title {
+  margin-bottom: 5px;
+  padding-right: 30px;
+  font-size: 12pt;
+  font-family: Tahoma, Arial;
+}
+
+#en-markup-alert-container .cell-2 .cell-2-message {
+  padding-right: 30px;
+  font-size: 9.5pt;
+  font-family: Tahoma, Arial;
+}
+
+#en-markup-alert-container .cell-3 {
+  position: relative;
+  width: 450px;
+  height: 60px;
+  float: left;
+  background-color: rgb(240,240,240);
+}
+
+#en-markup-alert-container .cell-3 button {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  width: 110px;
+  height: 36px;
+}
+
+#en-markup-alert-container .cell-3 button.alt-button {
+  position: absolute;
+  top: 12px;
+  right: 140px;
+  width: 110px;
+  height: 36px;
+}
+</style></head>
+  <body>
+    <!-- loading -->
+    <div class="spinner-wrapper hidden" id="spinnerLoading">
+      <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
+    </div>
+    <div id="index">
+    </div>
+    <div class="modal fade" id="tipModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-pc-message" role="document">
+      <div class="modal-content">
+        <div class="modal-header"></div>
+        <div class="modal-body">
+          <div class="modal-title">正在组卷中，请耐心等待...</div>
+        </div>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+
+
+    <div class="modal fade" id="captureModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-ios-message" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            该考试启动了摄像头监控，<br>只能通过电脑作答
+          </div>
+          <div class="modal-footer modal-footer-tab1">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">知道了</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="wechatModal" style="display: none;">
+      <div class="tip-ava wechat-ava">
+        <span class="tip-circle wechat-circle"></span>
+        <span class="tip-line wechat-line"></span>
+      </div>
+      <div class="tip-text wechat-text">请在微信客户端打开链接</div>
+    </div>
+
+
+    <div id="dingTalkModal" style="display: none;">
+      <div class="tip-ava dingTalk-ava">
+        <span class="tip-circle dingTalk-circle"></span>
+        <span class="tip-line dingTalk-line"></span>
+      </div>
+      <div class="tip-text dingTalk-text">请使用手机版钉钉进行答题</div>
+    </div>
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-pc-message modal-logout" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-title">您是否要退出登录？</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-gray" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-danger" id="confirmLogoutBtn">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="https://s3.kaoshixing.com/static/base/js/jquery.min.js?v=8101d596b257"></script>
+    <script type="text/javascript" src="https://s5.kaoshixing.com/static/plugins/bootstrap/js/bootstrap.min.js?v=87d37353ad57"></script>
+    <script type="text/javascript" src="/static/common/js/m_app_return_control.js"></script>
+    <script>
+      user = JSON.parse(window.localStorage.getItem("USER"));
+      var expireTime = JSON.parse(window.localStorage.getItem("EXPIRE_TIME"))
+      var now = new Date()
+      var year = now.getFullYear().toString()
+      var month = (now.getMonth()+1).toString().length>1?(now.getMonth()+1).toString():"0"+(now.getMonth()+1).toString()
+      var date = now.getDate().toString().length>1?now.getDate().toString():"0"+now.getDate().toString()
+      var hour = now.getHours().toString().length>1?now.getHours().toString():"0"+now.getHours().toString()
+      var minute = now.getMinutes().toString().length>1?now.getMinutes().toString():"0"+now.getMinutes().toString()
+      var second = now.getSeconds().toString().length>1?now.getSeconds().toString():"0"+now.getSeconds().toString()
+      var nowTime = year+month+date+hour+minute+second
+      if(nowTime - expireTime >= -10){
+        window.location.href = "/admin/login?nextUrl=" + window.location.href
+      }
+    </script>
+    <script type="text/javascript">
+
+      $.ajaxSetup({
+        contentType:"application/x-www-form-urlencoded;charset=utf-8",
+        headers:{
+          Authentication:JSON.parse(window.localStorage.getItem("USER_TOKEN"))
+        },
+        statusCode: {
+          404: function() {
+            window.location.href="/admin/error/exam_404";
+          },
+          504: function() {
+            window.location.href="/admin/error/exam_default";
+          },
+          500: function() {
+            window.location.href="/admin/error/exam_default";
+          },
+          429:function () {
+            alert("您操作过于频繁！");
+          },
+          401:function () {
+            window.location.href="/admin/error/401";
+          },
+          400:function () {
+            window.location.href="/admin/error/exam_400";
+          },
+          403:function () {
+            window.location.href="/admin/error/exam_403";
+          },
+        }
+      });
+      var companyId = user.companyId; //公司id
+      $(function () {
+        //页面加载loading
+        $("#spinnerLoading").addClass("hidden");
+
+        // ajaxstart with loading shown
+        $( document ).ajaxStart(function() {
+          $("#spinnerLoading").removeClass("hidden");
+        });
+        // ajaxstop with loading hidden
+        $( document ).ajaxStop(function() {
+          $("#spinnerLoading").addClass("hidden");
+        });
+
+
+        //读取用户自定义LOGO
+        // if($("#companyLogo").length>0){
+        //   var _this = $("#companyLogo");
+        //
+        //   $.ajax({
+        //     type: "GET",
+        //     cache : false,
+        //     dataType: "json",
+        //     url: "/setting/admin/modify_get_logo",
+        //     success: function(msg){
+        //       if(msg.success){
+        //         var logo_url = msg.bizContent.logoUrl;
+        //         var img = '<img class="icon-logo logo-ksx" src="'+logo_url+'" />';
+        //         $(_this).append(img);
+        //       }
+        //     }
+        //   });
+        // }
+
+        // 退出登录(清空cookie,session&&sessionId)
+        $("#logoutBtn").click(function (e) {
+          e.preventDefault();
+
+          $("#logoutModal").modal();
+        });
+
+        //确认退出登录
+        $("#confirmLogoutBtn").click(function () {
+          $.ajax({
+            type: "POST",
+            cache : false,
+            dataType: "json",
+            url: "/api/admin/logout",
+            data:{
+              account:user.account,
+              companyId:user.companyId
+            },
+            success: function(msg){
+              var jump_url = msg.bizContent.url;
+              window.location.href = jump_url;
+
+            }
+          });
+        });
+
+
+        //第三方需求，隐藏logo和退出，返回
+        $(function () {
+          //获取cookie
+          var thirdParty = getCookie('thirdParty');
+
+          if(thirdParty=='true'){
+            $("#logoutBtn, .back-icon").addClass("hidden");
+          }
+        });
+      });
+
+      // set cookie
+      function setCookie(cookieName, cookieValue, expiresTime){
+        $("#spinnerLoading").addClass("hide");
+
+        $.ajax( {
+          type:"post",
+          url:"/login/account/set_cookie",
+          dataType:"json",
+          data: "cookieName=" + cookieName + "&cookieValue=" + cookieValue + "&expiresTime=" + expiresTime,
+          success:function(msg){
+            $("#spinnerLoading").removeClass("hide");
+            return msg;
+          },
+          error:function (msg) {
+            $("#spinnerLoading").removeClass("hide");
+          }
+        });
+
+      }
+
+
+      // get cookie
+      function getCookie(c_name){
+        if(document.cookie.length>0){
+          c_start=document.cookie.indexOf(c_name + "=")
+          if(c_start!=-1){
+            c_start=c_start + c_name.length+1;
+            c_end=document.cookie.indexOf(";",c_start);
+            if (c_end==-1){
+              c_end=document.cookie.length
+            }
+            return unescape(document.cookie.substring(c_start,c_end));
+          }
+        }
+        return "";
+      }
+
+      function is_mobile(){//是否移动端设备判断
+        var sUserAgent = navigator.userAgent.toLowerCase();
+        var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+        var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+        var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+        var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+        var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+        var bIsAndroid = sUserAgent.match(/android/i) == "android";
+        var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+        var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+        var bIsWx=sUserAgent.match(/MicroMessenger/i)=="micromessenger";
+        return bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM || bIsWx;
+      }
+    </script>
+    <!--<script type="text/javascript" src="https://s0.kaoshixing.com/static/base/js/m_hidden_config.js?v=a22a0747ff2"></script>-->
+    <!--<script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.7.13/dingtalk.open.js"></script>-->
+    <script type="text/javascript">
+      var exam_id = window.location.href.split("#/")[1];
+      var needWechat = 'false';
+      var dingtalkEnv = '1';
+      var capture = '0';
+      var setExamPwd = '0';
+      var skipLogin = '0';
+      var setVerify = '0';
+      var needCheck = (setExamPwd == '1');
+      var exam_start_url = "/depts/exam/exam_start/#/" + exam_id;
+      var queryInterval;
+
+      $(function () {
+        // 返回跳转
+        $('a.m_logout').click(function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+          window.location.href = '/depts/exam/';
+        });
+
+        if(needCheck){
+          // 验证考试密码 (只在输入框失焦时校验)
+          $("#examPwd").blur(function() {
+            checkPwd();
+          });
+        }
+
+        //进入考试 master-exam
+        $("#startExamBtn").click(function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          //如果需要校验考前密码
+          if(needCheck){
+            if(!checkPwd()) {
+              return ;
+            } else {
+              return checkPwdCorrect();
+            }
+          }
+
+          actionExam();
+
+        });
+
+        //进入考试 exam-dt
+        // $("#startExamBtn").click(function (e) {
+        //     e.stopPropagation();
+        //     e.preventDefault();
+        //     //如果errorInfo没有hidden 如果需要校验考前密码
+        //     if(needCheck && !$("#errorInfo").hasClass("hidden")){
+        //         return false;
+        //     }
+        //     var examInfoId = $(this).attr("data-id");
+        //     var setIpRange = $(this).attr("data-setIpRange");
+        //     var checkPass = $(".input-check.success").length==1;
+        //
+        //     //需要检查且检查为正确   或  不需检查
+        //     if((needCheck && $(".input-check.success").length==1) || !needCheck){
+        //         if(setVerify){
+        //             //考前身份认证直接进考试url，后端校验
+        //             window.location.href = exam_start_url;
+        //         }else {
+        //             //检查题目数目是否超出限制
+        //             $.ajax({
+        //                 type: "POST",
+        //                 data: { "examId": examInfoId, "setIpRange":setIpRange},
+        //                 url : "/exam/check_hard_over_count",
+        //                 dataType: 'json',
+        //                 success: function (msg) {
+        //                     if (msg.success) {
+        //                         alert(msg.desc);
+        //                     } else {
+        //                         //没有超出限制
+        //                         $("#tipModal").modal({
+        //                             backdrop: "static",
+        //                             keyboard: false
+        //                         });
+        //                         var url;
+        //                         if(msg.bizContent){
+        //                             url = msg.bizContent;
+        //                         }
+        //                         queryInterval = setInterval(function () {
+        //                             checkOrgnization(examInfoId,url)
+        //                         }, 2000);
+        //                         //立即执行一次
+        //                         checkOrgnization(examInfoId,url);
+        //                     }
+        //                 }
+        //             });
+        //         }
+        //     }
+        //     actionExam();
+        // });
+
+        //触发能否进入考试
+        function actionExam() {
+          var examInfoId = $('#startExamBtn').attr("data-id");
+          var setIpRange = $('#startExamBtn').attr("data-setIpRange");
+          window.location.href = exam_start_url;
+          if(setVerify){
+            //考前身份认证直接进考试url，后端校验
+            window.location.href = exam_start_url;
+          }else {
+            //检查题目数目是否超出限制
+            $.ajax({
+              type: "POST",
+              data: { "examId": examInfoId, "setIpRange":setIpRange},
+              url : "/exam/check_hard_over_count",
+              dataType: 'json',
+              success: function (msg) {
+                if (msg.success) {
+                  alert(msg.desc);
+                } else {
+                  //没有超出限制
+                  $("#tipModal").modal({
+                    backdrop: "static",
+                    keyboard: false
+                  });
+                  var url;
+                  if(msg.bizContent){
+                    url = msg.bizContent;
+                  }
+                  queryInterval = setInterval(function () {
+                    checkOrgnization(examInfoId,url)
+                  }, 2000);
+                  //立即执行一次
+                  checkOrgnization(examInfoId,url);
+                }
+              }
+            });
+          }
+        }
+
+        //验证考试密码是否符合规范
+        function checkPwd() {
+          var length = $("#examPwd").val().length;
+          var pobj = $("#examPwd").parent(".input-check");
+          $("#errorInfo").text("").addClass("hidden");
+          $(pobj).removeClass("error");
+          if(length<5 || length>9){
+            $(pobj).removeClass("success").addClass("error");
+            $("#errorInfo").text("请输入6～8位密码").removeClass("hidden");
+            return false;
+          }
+          return true;
+        }
+
+        //验证考试密码是否正确
+        function checkPwdCorrect() {
+          var examPwd = $("#examPwd").val().replace(/"/g,"&quot;").replace(/'/g,"&apos;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+          var pobj = $("#examPwd").parent(".input-check");
+          var examInfoId = $("#examPwd").attr("data-id");
+          $("#errorInfo").text("").addClass("hidden");
+          $(pobj).removeClass("error");
+          $.ajax({
+            type:"POST",
+            cache : false,
+            headers: { "cache-control": "no-cache" },
+            dataType: "json",
+            data: {"examInfoId": examInfoId, "examPwd": examPwd},//考试id和考试密码
+            url: "/exam/checkExamPwd",
+            success:function(msg) {
+              if(msg.success){
+                $(pobj).removeClass("error").addClass("success");
+                actionExam();
+              }else{
+                $(pobj).removeClass("success").addClass("error");
+                $("#errorInfo").text("密码不正确").removeClass("hidden");
+              }
+            }
+
+          });
+
+        }
+
+        //检查组卷是否完成
+        function checkOrgnization(exam_id,url) {
+          $("#spinnerLoading").addClass("hide");
+          $.ajax({
+            type: "POST",
+            data: {"examId": exam_id},
+            url: "/exam/test_complete",
+            async: false,
+            success: function (msg) {
+              if (msg=='true') {
+                clearInterval(queryInterval);
+                if(typeof url != "undefined"){
+                  window.location.href = url;
+                }else {
+                  window.location.href = exam_start_url;
+                }
+              }
+            },
+            error: function () {
+              $("#spinnerLoading").removeClass("hide");
+              clearInterval(queryInterval);
+              $("#tipModal").modal('hide');
+            }
+          });
+        }
+      });
+
+      // 判断是否是PC
+      function IsPC() {
+        var userAgentInfo = navigator.userAgent;
+        var Agents = ["Android", "iPhone",
+          "SymbianOS", "Windows Phone",
+          "iPad", "iPod"];
+        var flag = true;
+
+        for (var v = 0; v < Agents.length; v++) {
+          if (userAgentInfo.indexOf(Agents[v]) > 0) {
+            flag = false;
+            break;
+          }
+        }
+        return flag;
+      }
+
+      //判断是否是微信端
+      function jundgeWX() {
+        return navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1;
+      }
+
+      $(document).ready(function (){
+        // 如果是钉钉环境
+        if(dingtalkEnv === '0'){
+          if(capture == 1 && IsPC()){
+            $('#dingTalkModal').fadeIn();
+          }
+        }else {
+          // 如果不是钉钉浏览器环境
+          if (dd.env.platform == "notInDingTalk") {
+            if(needWechat == 'true' && !jundgeWX()){
+              $('#wechatModal').fadeIn();
+            }
+          }
+        }
+      });
+
+    </script>
+
+    </body>
+</html>

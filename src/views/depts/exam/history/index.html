@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="在线考试系统">
+    <meta name="description" content="爱考星,可以用手机考试,支持多种客户端">
+    <meta name="author" content="">
+    <title>考试系统</title>
+    <link rel="shortcut icon" href="/static/images/logo.jpg">
+    <link rel="stylesheet" type="text/css" href="https://s1.kaoshixing.com/static/plugins/bootstrap/css/bootstrap.min.css?v=9ed71d952357">
+    <link rel="stylesheet" type="text/css" href="https://s1.kaoshixing.com/static/plugins/IconFont/css/styles.min.css?v=155b8a0f0957">
+    <link rel="stylesheet" type="text/css" href="https://s4.kaoshixing.com/static/plugins/examFont/style.css?v=7a179044b757">
+    <link rel="stylesheet" type="text/css" href="https://s4.kaoshixing.com/static/base/css/base.css?v=af1f18f7bb57">
+    <link rel="stylesheet" type="text/css" href="https://s4.kaoshixing.com/static/base/css/exam_base.css?v=382dbd0c2357">
+    <style>
+      #payModal #payCode {
+        display: none;
+        font-size: 20px;
+      }
+      #payModal #payCode .pay-tip {
+        font-size: 14px;
+        color: #C1C1CB;
+        margin-top: 10px;
+      }
+      #payModal.modal-payment #payCode {
+        display: block;
+      }
+      #payModal #payCode .code-img {
+        margin-top: 15px;
+        height: 80px;
+        text-align: center;
+      }
+      #payModal #payCode .code-img canvas{
+        width: 80px;
+      }
+      #payModal  .modal-title {
+        font-size: 20px;
+        color: #656577;
+      }
+      #payModal  .modal-title span {
+        color: #FE8545;
+        font-size: 16px;
+        margin-top: 10px;
+        display: inline-block;
+      }
+      #payModal  .modal-title span#examPrice {
+        font-size: 30px;
+      }
+      .modal-payment .modal-footer {
+        display: none;
+      }
+      #jumpProess{
+        text-decoration:underline;
+        width: 170px;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+      }
+
+      /*筛选优化*/
+      .header-wrapper .panel-classify.filterContainer{
+        max-width: unset;
+        width: 386px;
+        /*font-size: 0;*/
+        padding:10px 20px 0 20px;
+      }
+      .header-wrapper .panel-classify.filterContainer .title{
+        font-size: 16px;
+        color: #27274A;
+        line-height: 16px;
+        margin: 15px 0;
+      }
+      .header-wrapper .panel-classify.filterContainer .options{
+        font-size: 0;
+        line-height: 14px;
+      }
+      .header-wrapper .panel-classify.filterContainer .options .menu-item{
+        background: #F1F3F8;
+        border-radius: 15px;
+        padding: 7px 15px;
+        font-size: 12px;
+        color: #656577;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        display: inline-block;
+      }
+      .header-wrapper .panel-classify.filterContainer .options .menu-item.active{
+        font-weight: 600;
+        color: #FFFFFF;
+        background: #1A8CFE;
+      }
+      .filterContainer .buttonsContainer{
+        line-height: 0;
+        margin: 20px 0;
+        text-align: center;
+        font-size: 0;
+      }
+      .resetFilterBtn{
+        width: 100px;
+        height: 34px;
+        font-size: 14px;
+        color: #656577;
+        background: #F1F3F8;
+        border-radius: 4px;
+        margin: 0 7px;
+      }
+      .changeFilterBtn{
+        width: 100px;
+        height: 34px;
+        font-size: 14px;
+        color: #FFFFFF;
+        border-radius: 4px;
+        margin: 0 7px;
+      }
+      .browserHint {
+        width: 100%;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;
+        background-color: #FED6D7;
+        color: #FB1E2C;
+        padding: 10px 0px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1;
+      }
+      .browserHint .downloadGoogle {
+        color: #1F63DB;
+      }
+      .viewFrameWork.active {
+        padding-top: 110px;
+      }
+      .viewFrameWork .viewFrameWork-statusbar.active {
+        top: 40px;
+      }
+    </style>
+    <style>
+      .nav-item{
+        position: relative;
+      }
+      .nav-item .show-num{
+        position: absolute;
+        left: 76px;
+        top: 3px;
+        display: none;
+        background: #FF4B50;
+        color: #fff;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        font-size: 12px;
+      }
+      #examPointScoreModal .table-content .point-one span.one{
+        content: '';
+        background-image: url("https://s0.kaoshixing.com/static/exam/images/competition/p_icon_first.svg");
+        background-size: 18px 46px;
+        background-repeat: no-repeat;
+      }
+      #examPointScoreModal .table-content .point-one span.two{
+        content: '';
+        background-image: url("https://s0.kaoshixing.com/static/exam/images/competition/p_icon_second.svg");
+        background-size: 18px 46px;
+        background-repeat: no-repeat;
+      }
+      #examPointScoreModal .table-content .point-one span.three{
+        content: '';
+        background-image: url("https://s1.kaoshixing.com/static/exam/images/competition/p_icon_third.svg");
+        background-size: 18px 46px;
+        background-repeat: no-repeat;
+      }
+
+
+    </style>
+    <style type="text/css">/* Copyright 2014-present Evernote Corporation. All rights reserved. */
+    @keyframes caretBlink {
+      from { opacity: 1.0; }
+      to { opacity: 0.0; }
+    }
+
+    @keyframes rotateSpinner {
+      from {
+        transform:rotate(0deg);
+      }
+      to {
+        transform:rotate(360deg);
+      }
+    }
+
+    #text-tool-caret {
+      animation-name: caretBlink;
+      animation-iteration-count: infinite;
+      animation-timing-function: cubic-bezier(1.0,0,0,1.0);
+      animation-duration: 1s;
+    }
+
+    #en-markup-loading-spinner {
+      position: absolute;
+      top: calc(50% - 16px);
+      left: calc(50% - 16px);
+      width: 32px;
+      height: 32px;
+    }
+
+    #en-markup-loading-spinner img {
+      position: relative;
+      top: 0px;
+      left: 0px;
+      animation-name: rotateSpinner;
+      animation-duration: 0.6s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+    </style>
+    <style type="text/css">/* Copyright 2014-present Evernote Corporation. All rights reserved. */
+    .skitchToastBoxContainer {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      top: 30px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      pointer-events: none;
+    }
+
+    .skitchToastBox {
+      width: 200px;
+      height: 16px;
+      padding: 12px;
+      background-color: rgba(47, 55, 61, 0.95);
+      border-radius: 4px;
+      color: white;
+      cursor: default;
+      font-size: 10pt;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.32);
+      font-family: 'Soleil', Helvetica, Arial, sans-serif;
+      border: 2px rgba(255, 255, 255, 0.38) solid;
+    }
+
+    .lang-zh-cn .skitchToastBox {
+      font-family: '微软雅黑', 'Microsoft YaHei', SimSun,
+      '&#x30E1;&#x30A4;&#x30EA;&#x30AA;', Meiryo, 'MS PGothic', 'Soleil',
+      Helvetica, Arial, sans-serif;
+    }
+
+    .lang-ja-jp .skitchToastBox {
+      font-family: '&#x30E1;&#x30A4;&#x30EA;&#x30AA;', Meiryo, 'MS PGothic',
+      '微软雅黑', 'Microsoft YaHei', SimSun, 'Soleil', Helvetica, Arial,
+      sans-serif;
+    }
+
+    .skitchToast {
+      padding-left: 20px;
+      padding-right: 20px;
+      display: inline-block;
+      height: 10px;
+      color: #f1f5f8;
+      text-align: center;
+    }
+
+    .skitchVisible {
+      /* Don't remove this class it's a hack used by the Evernote Clipper */
+    }
+    </style>
+    <style type="text/css">/* Copyright 2014-present Evernote Corporation. All rights reserved. */
+
+    @font-face {
+      font-family: 'Soleil';
+
+      font-weight: normal;
+      font-style: normal;
+    }
+    </style>
+    <style type="text/css">/* Copyright 2019-present Evernote Corporation. All rights reserved. */
+
+    #en-markup-disabled {
+      position: fixed;
+      z-index: 9999;
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      left: 0px;
+      cursor: default;
+      -webkit-user-select: none;
+    }
+
+    #en-markup-alert-container {
+      position: absolute;
+      z-index: 9999;
+      width: 450px;
+      left: calc(50% - 225px);
+      top: calc(50% - 85px);
+      background-color: white;
+      box-shadow: 0 2px 7px 1px rgba(0,0,0,0.35);
+      -webkit-user-select: none;
+    }
+
+    #en-markup-alert-container .cell-1 {
+      position: relative;
+      height: 110px;
+      width: 105px;
+      float: left;
+      text-align: center;
+
+      background-position: 65% 50%;
+      background-repeat: no-repeat;
+    }
+
+    #en-markup-alert-container .cell-2 {
+      position: relative;
+      float: left;
+      width: 345px;
+      margin-top: 29px;
+      margin-bottom: 20px;
+    }
+
+    #en-markup-alert-container .cell-2 .cell-2-title {
+      margin-bottom: 5px;
+      padding-right: 30px;
+      font-size: 12pt;
+      font-family: Tahoma, Arial;
+    }
+
+    #en-markup-alert-container .cell-2 .cell-2-message {
+      padding-right: 30px;
+      font-size: 9.5pt;
+      font-family: Tahoma, Arial;
+    }
+
+    #en-markup-alert-container .cell-3 {
+      position: relative;
+      width: 450px;
+      height: 60px;
+      float: left;
+      background-color: rgb(240,240,240);
+    }
+
+    #en-markup-alert-container .cell-3 button {
+      position: absolute;
+      top: 12px;
+      right: 15px;
+      width: 110px;
+      height: 36px;
+    }
+
+    #en-markup-alert-container .cell-3 button.alt-button {
+      position: absolute;
+      top: 12px;
+      right: 140px;
+      width: 110px;
+      height: 36px;
+    }
+    </style>
+    <style>
+      .el-tooltip__popper {
+        position: absolute;
+        border-radius: 4px;
+        padding: 10px;
+        z-index: 2000;
+        font-size: 12px;
+        line-height: 1.2;
+        min-width: 10px;
+      }
+      .el-tooltip__popper.is-dark {
+        background: #303133;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="browserHint" style="display: none">系统检测您使用的非谷歌浏览器，建议您使用谷歌浏览器获得更稳定的服务体验! <a class="downloadGoogle" href="https://www.google.cn/chrome/" target="_blank">点击下载</a> </div>
+    <div id="index">
+    </div>
+
+
+
+
+    <div class="modal fade" id="setPasswordModal" tabindex="-1" role="dialog" style="display: none;">
+      <div class="modal-dialog modal-440 modal-set-password" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="title">修改密码</div>
+            <form id="setPwdForm">
+              <div class="items">
+                <div class="item item-input-group">
+                  <div class="item-label">原密码：</div>
+                  <input class="item-input" type="password" name="oldPassword" id="oldPassword" placeholder="请输入原密码">
+                  <i class="icon item-icon icon-m_exam_error"></i>
+                </div>
+                <div class="item item-input-group">
+                  <div class="item-label">新密码：</div>
+                  <input class="item-input" type="password" name="newPassword" id="newPassword" placeholder="新密码为6-20位数字、字母或符号的任意组合">
+                  <i class="icon item-icon icon-m_exam_error"></i>
+                </div>
+                <div class="item item-input-group">
+                  <div class="item-label">确认密码：</div>
+                  <input class="item-input" type="password" name="reNewPassword" id="reNewPassword" placeholder="请再次输入新密码">
+                  <i class="icon item-icon icon-m_exam_error"></i>
+                </div>
+              </div>
+            </form>
+
+            <div class="error-info hidden" id="errorInfoPwd"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-gray" id="cancelSetPwdBtn" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" id="savePasswordBtn">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-pc-message modal-logout" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-title">您是否要退出登录？</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-gray" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-danger" id="confirmLogoutBtn">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      user = JSON.parse(window.localStorage.getItem("USER"));
+      var expireTime = JSON.parse(window.localStorage.getItem("EXPIRE_TIME"))
+      var now = new Date()
+      var year = now.getFullYear().toString()
+      var month = (now.getMonth()+1).toString().length>1?(now.getMonth()+1).toString():"0"+(now.getMonth()+1).toString()
+      var date = now.getDate().toString().length>1?now.getDate().toString():"0"+now.getDate().toString()
+      var hour = now.getHours().toString().length>1?now.getHours().toString():"0"+now.getHours().toString()
+      var minute = now.getMinutes().toString().length>1?now.getMinutes().toString():"0"+now.getMinutes().toString()
+      var second = now.getSeconds().toString().length>1?now.getSeconds().toString():"0"+now.getSeconds().toString()
+      var nowTime = year+month+date+hour+minute+second
+      if(nowTime - expireTime >= -10){
+        window.location.href = "/admin/login?nextUrl=" + window.location.href
+      }
+    </script>
+    <script type="text/javascript" src="https://s3.kaoshixing.com/static/base/js/jquery.min.js?v=8101d596b257"></script>
+    <script type="text/javascript" src="https://s5.kaoshixing.com/static/plugins/bootstrap/js/bootstrap.min.js?v=87d37353ad57"></script>
+    <script type="text/javascript" src="https://s4.kaoshixing.com/static/plugins/md5.min.js?v=fab926bdcb57"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <!--<script type="text/javascript" src="/static/common/js/exam_base.js"></script>-->
+    <!--<script type="text/javascript" src="/static/common/js/user.js"></script>-->
+    <script src="https://s2.kaoshixing.com/static/plugins/jquery.qrcode.min.js?v=0430496679"></script>
+    <script type="text/javascript">
+      $(function () {
+        //查看考试结果
+        $("body").on("click", ".item-exam .btn-item-exam", function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          var _this = $(this);
+          var itemExam = $(_this).parents(".item-exam");
+          var result_id = $(_this).attr("data-result-id");
+
+
+          if($(itemExam).hasClass("item-checking")){
+            //判分中
+            window.location.href = "/depts/exam/exam_checking?examResultsId=" + result_id;
+          }else {
+            window.location.href = "/depts/exam/result/inquire?examResultsId=" + result_id + '&type=1';
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
+
+
