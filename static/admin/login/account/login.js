@@ -63,9 +63,9 @@ function userLogin(isTechSupportLogin) {
               var user = JSON.parse(window.localStorage.getItem("USER"));
               var token = JSON.parse(window.localStorage.getItem("USER_TOKEN"));
               var url =msg.bizContent.url;
-              if (user.roleName == 'staff') {//如果是员工角色
-                return window.location.href = url;
-              }else{
+              // if (user.roleName == 'staff') {//如果是员工角色
+              //   return window.location.href = url;
+              // }else{
                 $.ajax({
                   // type: "POST",
                   cache: "false",
@@ -77,11 +77,14 @@ function userLogin(isTechSupportLogin) {
                   url: "/api/menu/" + user.account + "/" + user.companyId,
                   success: function (msg) {
                     window.localStorage.setItem("USER_ROUTER",JSON.stringify(msg.block));
+                    if (nextUrl != '') {
+                      return window.location.href = nextUrl;
+                    }
                     window.location.href = url;
                   }
                 })
               }
-            }
+            // }
           } else {
             if (msg.code == 33085) { //技术支持中
               $("#techSupportModal .model-head").text(msg.desc);
@@ -246,12 +249,12 @@ function userLogin(isTechSupportLogin) {
                   var user = JSON.parse(window.localStorage.getItem("USER"));
                   var token = JSON.parse(window.localStorage.getItem("USER_TOKEN"));
                   var url =msg.bizContent.url;
-                  if (user.roleName == 'staff') {//如果是员工角色
-                    if (nextUrl != '') {
-                      return window.location.href = nextUrl;
-                    }
-                    return window.location.href = url;
-                  }else {
+                  // if (user.roleName == 'staff') {//如果是员工角色
+                  //   if (nextUrl != '') {
+                  //     return window.location.href = nextUrl;
+                  //   }
+                  //   return window.location.href = url;
+                  // }else {
                     $.ajax({
                       // type: "POST",
                       cache: "false",
@@ -270,7 +273,7 @@ function userLogin(isTechSupportLogin) {
                         window.location.href = url;
                       }
                     })
-                  }
+                  // }
                 }
                 $("#techSupportModal").modal("hide");
               } else {
